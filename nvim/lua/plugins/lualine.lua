@@ -8,7 +8,7 @@ local M = {
     local config = require('lualine')
     config.setup({
       options = {
-        theme = 'dracula'
+        theme = 'gruvbox_dark'
       }
     })
   end

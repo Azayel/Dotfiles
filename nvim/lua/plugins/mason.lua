@@ -19,7 +19,7 @@ local M = {
 		config = function()
 			local config = require("mason-lspconfig")
 			config.setup({
-				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman" },
+				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman", "omnisharp" },
 			})
 		end,
 	},
@@ -42,6 +42,9 @@ local M = {
 			lspconfig.marksman.setup({
 				capabilities = capabilities,
 			})
+      lspconfig.omnisharp.setup({
+        capabilities = capabilities,
+      })
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),

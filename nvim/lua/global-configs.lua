@@ -8,4 +8,4 @@ vim.opt.signcolumn = "number"
 vim.g.mapleader = " "
 vim.opt.smartindent = true
 vim.opt.breakindent = true
-
+vim.api.nvim_set_option("clipboard", "unnamedplus")

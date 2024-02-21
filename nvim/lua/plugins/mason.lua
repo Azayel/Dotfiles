@@ -19,7 +19,7 @@ local M = {
 		config = function()
 			local config = require("mason-lspconfig")
 			config.setup({
-				ensure_installed = { "lua_ls", "clangd", "ltex" },
+				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman" },
 			})
 		end,
 	},
@@ -37,6 +37,9 @@ local M = {
 			})
 			lspconfig.ltex.setup({
 
+				capabilities = capabilities,
+			})
+			lspconfig.marksman.setup({
 				capabilities = capabilities,
 			})
 
@@ -59,6 +62,7 @@ local M = {
 					vim.keymap.set("n", "<space>wl", function()
 						print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 					end, opts)
+
 					vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
 					vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
 					vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)

@@ -19,7 +19,7 @@ local M = {
 		config = function()
 			local config = require("mason-lspconfig")
 			config.setup({
-				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman", "omnisharp" },
+				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman" },
 			})
 		end,
 	},
@@ -27,7 +27,7 @@ local M = {
 		"neovim/nvim-lspconfig",
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
+      capabilities.offsetEncoding = "utf-8"
 			local lspconfig = require("lspconfig")
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
@@ -42,9 +42,11 @@ local M = {
 			lspconfig.marksman.setup({
 				capabilities = capabilities,
 			})
+      --[[
       lspconfig.omnisharp.setup({
         capabilities = capabilities,
       })
+      ]]--
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),

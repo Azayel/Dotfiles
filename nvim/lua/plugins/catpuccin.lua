@@ -1,4 +1,5 @@
 return {
+  {"dylanaraps/wal.vim"},
   { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = ... },
   {
     "catppuccin/nvim",

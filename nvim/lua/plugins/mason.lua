@@ -19,7 +19,7 @@ local M = {
 		config = function()
 			local config = require("mason-lspconfig")
 			config.setup({
-				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman" },
+				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman", "asm_lsp" },
 			})
 		end,
 	},
@@ -27,8 +27,9 @@ local M = {
 		"neovim/nvim-lspconfig",
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      capabilities.offsetEncoding = "utf-8"
+			capabilities.offsetEncoding = "utf-16"
 			local lspconfig = require("lspconfig")
+			local util = require("lspconfig/util")
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 			})
@@ -42,18 +43,36 @@ local M = {
 			lspconfig.marksman.setup({
 				capabilities = capabilities,
 			})
-      --[[
+      lspconfig.asm_lsp.setup({
+        capabilities = capabilities,
+      })
+
+      local rust_capabilities = vim.deepcopy(capabilities)
+      rust_capabilities.offsetEncoding = nil
+			lspconfig.rust_analyzer.setup({
+				capabilities = rust_capabilities,
+		    filetypes = { "rust" },
+				root_dir = util.root_pattern("Cargo.toml"),
+				settings = {
+					["rust-analyzer"] = {
+						cargo = {
+							allFeatures = true,
+						},
+					},
+				},
+			})
+			--[[
       lspconfig.omnisharp.setup({
         capabilities = capabilities,
       })
-      ]]--
+      ]]
+			--
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 				callback = function(ev)
 					-- Enable completion triggered by <c-x><c-o>
 					vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-
 					-- Buffer local mappings.
 					-- See `:help vim.lsp.*` for documentation on any of the below functions
 					local opts = { buffer = ev.buf }

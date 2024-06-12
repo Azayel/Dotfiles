@@ -1,6 +1,11 @@
 local M = {
 	{
 		"williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "codelldb",
+      }
+    },
 		config = function()
 			local config = require("mason")
 			config.setup({
@@ -19,7 +24,7 @@ local M = {
 		config = function()
 			local config = require("mason-lspconfig")
 			config.setup({
-				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman", "asm_lsp" },
+				ensure_installed = { "lua_ls", "clangd", "ltex", "marksman", "asm_lsp", "jdtls"  },
 			})
 		end,
 	},
@@ -29,12 +34,21 @@ local M = {
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			capabilities.offsetEncoding = "utf-16"
 			local lspconfig = require("lspconfig")
-			local util = require("lspconfig/util")
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 			})
 			lspconfig.clangd.setup({
 				capabilities = capabilities,
+        cmd = {
+      "clangd",
+      "--background-index",
+      "--clang-tidy",
+      "--header-insertion=iwyu",
+      "--completion-style=detailed",
+      "--function-arg-placeholders",
+      "--fallback-style=llvm",
+      "--header-insertion=never",
+    },
 			})
 			lspconfig.ltex.setup({
 
@@ -43,25 +57,39 @@ local M = {
 			lspconfig.marksman.setup({
 				capabilities = capabilities,
 			})
-      lspconfig.asm_lsp.setup({
-        capabilities = capabilities,
-      })
+			lspconfig.asm_lsp.setup({
+				capabilities = capabilities,
+			})
+			lspconfig.jdtls.setup({
+				capabilities = capabilities,
+			})
 
-      local rust_capabilities = vim.deepcopy(capabilities)
-      rust_capabilities.offsetEncoding = nil
+			--local rust_capabilities = vim.deepcopy(capabilities)
+			--rust_capabilities.offsetEncoding = "utf-16"
+			local on_attach = function(client)
+				require("completion").on_attach(client)
+			end
 			lspconfig.rust_analyzer.setup({
-				capabilities = rust_capabilities,
-		    filetypes = { "rust" },
-				root_dir = util.root_pattern("Cargo.toml"),
+        on_attach = on_attach;
 				settings = {
 					["rust-analyzer"] = {
+						imports = {
+							granularity = {
+								group = "module",
+							},
+							prefix = "self",
+						},
 						cargo = {
-							allFeatures = true,
+							buildScripts = {
+								enable = true,
+							},
+						},
+						procMacro = {
+							enable = true,
 						},
 					},
 				},
-			})
-			--[[
+			}) --[[
       lspconfig.omnisharp.setup({
         capabilities = capabilities,
       })

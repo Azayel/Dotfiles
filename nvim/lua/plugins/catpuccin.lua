@@ -1,5 +1,13 @@
 return {
-  {"dylanaraps/wal.vim"},
+  {
+    'navarasu/onedark.nvim',
+    config = function()
+      require('onedark').setup {
+        style = 'darker'
+      }
+      require('onedark').load()
+    end
+  },
   { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = ... },
   {
     "catppuccin/nvim",

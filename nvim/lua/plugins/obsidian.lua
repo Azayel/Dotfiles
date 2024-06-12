@@ -20,7 +20,7 @@ return {
 		workspaces = {
 			{
 				name = "personal",
-				path = "/home/asayel/Documents/Obsidian Vault",
+				path = "/home/asayel/Documents/git/Obsidian_Vault",
 			},
 		},
 
@@ -30,6 +30,25 @@ return {
 			-- Trigger completion at 2 chars.
 			min_chars = 2,
 		},
+		note_frontmatter_func = function(note)
+			-- Add the title of the note as an alias.
+			if note.title then
+				note:add_alias(note.title)
+			end
+
+			local out = { id = note.id, aliases = note.aliases, tags = note.tags}
+
+			-- `note.metadata` contains any manually added fields in the frontmatter.
+			-- So here we just make sure those fields are kept in the frontmatter.
+			if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+				for k, v in pairs(note.metadata) do
+					out[k] = v
+				end
+			end
+
+			return out
+		end,
+
 		mappings = {
 			-- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
 			["gf"] = {
@@ -51,6 +70,6 @@ return {
 			return string.format("[%s](%s)", opts.label, opts.path)
 		end,
 
-      preferred_link_style = "markdown",
+		preferred_link_style = "markdown",
 	},
 }

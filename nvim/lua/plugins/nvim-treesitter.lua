@@ -9,7 +9,7 @@ return {
       sync_install = false,
       highlight = {
         enable = true,
-        disable = { "latex" },
+        disable = { "latex","json" },
       },
       indent = { enable = true },
     })

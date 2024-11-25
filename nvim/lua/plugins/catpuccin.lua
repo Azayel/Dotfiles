@@ -5,10 +5,10 @@ return {
       require('onedark').setup {
         style = 'darker'
       }
-      require('onedark').load()
     end
   },
   { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = ... },
+  { "rose-pine/neovim", name = "rose-pine" },
   {
     "catppuccin/nvim",
     name = "catppuccin",
@@ -22,7 +22,7 @@ return {
           light = "latte",
           dark = "mocha",
       },
-      transparent_background = true, -- enables setting the background color.
+      transparent_background = true, -- enables setting the background color.color
       show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
       term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
       dim_inactive = {
